@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:lecture5/models/favourite_place.dart';
 import 'package:lecture5/providers/camera_provider.dart';
 import 'package:lecture5/providers/gallery_provider.dart';
 import 'package:lecture5/widgets/input_field_widget.dart';
@@ -15,6 +18,10 @@ class _CreatePlacePageState extends State<CreatePlacePage> {
   final _galleryProvider = GalleryProvider();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+
+  File _photo;
+  String _placeName;
+  String _placeDescription;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +69,25 @@ class _CreatePlacePageState extends State<CreatePlacePage> {
         ),
       ),
     );
+  }
+
+  void _save(BuildContext context) {
+    if (_photo == null || _placeName.isEmpty || _placeDescription.isEmpty) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+              'Photo, place name and place description must be specified.'),
+          backgroundColor: Theme.of(context).accentColor,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      final place = FavouritePlace(
+        image: _photo,
+        name: _placeName,
+        description: _placeDescription,
+      );
+    }
   }
 
   void _showImageBottomSheet(BuildContext context) {
